@@ -9,6 +9,7 @@ namespace Assesment_1
         public void Run()
         {
             //Test
+            Console.WriteLine("taco");
         }
     }
 }

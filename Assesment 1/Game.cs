@@ -44,19 +44,40 @@ namespace Assesment_1
         public void InitalizeItems()
         {
             //Wizard Items
-            Item wizardWand = new Item { Name = "Wizard Wand", StatBoost = 25, Type = ItemType.ATTACK };
-            Item wizardBook = new Item { Name = "Spell Book of Defense", StatBoost = 15, Type = ItemType.DEFENSE };
+            Item wizardWand = new Item { Name = "Wizard Wand", StatBoost = 20, Type = ItemType.ATTACK };
+            Item wizardBook = new Item { Name = "Spell Book of Defense", StatBoost = 5, Type = ItemType.DEFENSE };
 
             //Knight Items
-            Item sword = new Item { Name = "Knight Sword", StatBoost = 10, Type = ItemType.ATTACK };
-            Item shield = new Item { Name = "Knights Shield", StatBoost = 15, Type = ItemType.DEFENSE };
+            Item sword = new Item { Name = "Knight Sword", StatBoost = 15, Type = ItemType.ATTACK };
+            Item shield = new Item { Name = "Knights Shield", StatBoost = 5, Type = ItemType.DEFENSE };
 
             //Initialize item arrays per character
             _wizardItems = new Item[] { wizardWand, wizardBook };
             _knightItems = new Item[] { sword, shield };
 
         }
+        //Sets the enemies stats
+        public void InitalizeEnemies()
+        {
+            _currentEnemyIndex = 0;
 
+            //Enemie 1
+            Entity bandit = new Entity("Bandit", 10.0f, 5.0f, 5.0f);
+            //Enemie 2
+            Entity warrior = new Entity("Warrior Buuba", 15.0f, 10.0f, 15.0f);
+            //Enemie 3
+            Entity rockMon = new Entity("Rocky THe Rock Dude", 25.0f, 20.0f, 20.0f);
+            //Enemie 4
+            Entity thatGuy = new Entity("That One Guy", 1.0f, 1.0f, 1.0f);
+            //Enemie 5
+            Entity unclePhil = new Entity("Uncle PHil", 50.0f, 30.0f, 25.0f);
+
+            //Creates a array of enemies
+            _enemies = new Entity[] { bandit, warrior, rockMon, thatGuy, unclePhil };
+            //sets current enemy to a enemie in the current enemy index
+            _currentEnemy = _enemies[_currentEnemyIndex];
+            
+        }
         public void Run()
         {
             Start();
@@ -75,6 +96,8 @@ namespace Assesment_1
         {
             _gameOver = false;
             _currentScene = 0;
+            InitalizeItems();
+            InitalizeEnemies();
         }
         public void Update()
         {
@@ -96,6 +119,9 @@ namespace Assesment_1
                     break;
                 case Scene.CHARACTERSELECTION:
                     CharacterSelection();
+                    break;
+                case Scene.BATTLE:
+                    Battle();
                     break;
             }
         }
@@ -215,12 +241,12 @@ namespace Assesment_1
             int Choice = GetInput("Pick a Character. ", "Wizard", "Knight");
             if (Choice == 0)
             {
-                _player = new Player(_playerName, 30, 20, 10, _wizardItems, "Wizard");
+                _player = new Player(_playerName, 30, 20, 5, _wizardItems, "Wizard");
                 _currentScene = Scene.BATTLE;
             }
             else if (Choice == 1)
             {
-                _player = new Player(_playerName, 50, 15, 20, _knightItems, "Knight");
+                _player = new Player(_playerName, 50, 15, 10, _knightItems, "Knight");
                 _currentScene = Scene.BATTLE;
             }
             Console.ReadKey();
@@ -236,6 +262,72 @@ namespace Assesment_1
             Console.WriteLine("AttackPower: " + character.AttackPower);
             Console.WriteLine("DefensePower: " + character.DefensePower);
             Console.WriteLine();
+        }
+        public void DisplayEquipItemMenu()
+        {
+            //Gets item index
+            int input = GetInput("What You Want.", _player.GetItemNames());
+
+            //Equip item at given index
+            if (!_player.TryEquipItem(input))
+                Console.WriteLine("Yo where your stuff go!!? Item not found.");
+
+            //Prints Feedback if equiped
+            Console.WriteLine("You equipped " + _player.CurrentItem.Name + "!");
+        }
+        public void Battle()
+        {
+            float damageDealt = 0;
+
+            DisplayStats(_player);
+            DisplayStats(_currentEnemy);
+
+            int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?", "Attack", "Equip Item", "Remove current item", "Save Game");
+
+            //If player decides to Attack
+            if (input == 0)
+            {
+                damageDealt = _player.Attack(_currentEnemy);
+                Console.WriteLine("You dealt " + damageDealt + " damage!");
+            }
+            //If player decides to equiped a item
+            else if (input == 1)
+            {
+                DisplayEquipItemMenu();
+                Console.ReadKey();
+                Console.Clear();
+                return;
+            }
+            //If player unequipts item
+            else if (input == 2)
+            {
+                if (!_player.TryRemoveCurrentItem())
+                {
+                    Console.WriteLine("You dont got anything SOnnnnnnn.");
+                }
+                else
+                {
+                    Console.WriteLine("You Picked it up in your gucci bag. ");
+                }
+                Console.ReadKey(true);
+                Console.Clear();
+                return;
+            }
+            //If player wants to Save the game
+            else if (input == 3)
+            {
+                Save();
+                Console.WriteLine("Saved Game");
+                Console.ReadKey(true);
+                Console.Clear();
+                return;
+            }
+            //Displays how much dammagie you did and how much the enemie does
+            damageDealt = _currentEnemy.Attack(_player);
+            Console.WriteLine("The " + _currentEnemy.Name + " dealt" + damageDealt, " damage!");
+
+            Console.ReadKey(true);
+            Console.Clear();
         }
     }
 }

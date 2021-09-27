@@ -74,7 +74,61 @@ namespace Assesment_1
             _currentItem.Name = "Nothing";
             _job = job;
             _currentItemIndex = -1;
-        }
+        }       
+        /// <summary>
+        /// Sets the item at the given index to be the current item.
+        /// </summary>
+        /// <param name="index">The index of the item in the array</param>
+        /// <returns>False if the index is outside the bounds of the array</returns>
+        public bool TryEquipItem(int index)
+        {
+            //If the index is out of bounds..
+            if (index >= _items.Length || index < 0)
+            {
+                //..return false
+                return false;
+            }
+            //Setscurrent _current itemIndex
+            _currentItemIndex = index;
+            //Set the current item to be the array at the given index
+            _currentItem = _items[_currentItemIndex];
 
+            return true;
+        }
+        /// <summary>
+        /// Set the current item to be nothing
+        /// </summary>
+        /// <returns>False if there is no item equipped</returns>
+        public bool TryRemoveCurrentItem()
+        {
+            //If the current item is set to nothing..
+            if (CurrentItem.Name == "Nothing")
+            {
+                //..Return false
+                return false;
+            }
+            _currentItemIndex = -1;
+
+            //Set item to nothing
+            _currentItem = new Item();
+            _currentItem.Name = "Nothing";
+
+            return true;
+        }
+        /// <summary>
+        /// Gets all the names of the items in the players inventory
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetItemNames()
+        {
+            //sets the itemNames to the array items length
+            string[] itemNames = new string[_items.Length];
+
+            for (int i = 0; i < _items.Length; i++)
+            {
+                itemNames[i] = _items[i].Name;
+            }
+            return itemNames;
+        }
     }
 }

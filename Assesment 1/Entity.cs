@@ -47,6 +47,29 @@ namespace Assesment_1
             _attackPower = attackPower;
             _defensePower = defensePower;
         }
+        /// <summary>
+        /// Calculates the amout of damage that will be taken.
+        /// </summary>
+        /// <param attackpower="damageAmount"></param>
+        /// <returns></returns>
+        public float TakeDamage(float damageAmount)
+        {
+            float damageTaken = damageAmount - DefensePower;
+
+            if (damageTaken < 0)
+            {
+                damageTaken = 0;
+            }
+
+            _health -= damageTaken;
+
+            return damageTaken;
+        }
        
+        //Makes the defender take damage
+        public float Attack(Entity defender)
+        {
+            return defender.TakeDamage(AttackPower);
+        }
     }
 }

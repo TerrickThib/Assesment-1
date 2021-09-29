@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Assesment_1
 {
@@ -168,9 +169,34 @@ namespace Assesment_1
                 return;
             }
         }
-       public void UseShopItem()
+       public override void Save(StreamWriter writer)
+        {                      
+            writer.WriteLine(_job);
+            base.Save(writer);
+            writer.WriteLine(_currentItemIndex);
+            _gold = Gold();
+            writer.WriteLine(_gold);
+        }
+        public override bool Load(StreamReader reader)
         {
-            
+            _gold = Gold();
+            //If the Base loading function fails...
+            if (!base.Load(reader))
+                //return false
+                return false;
+
+            //If the current line can't be converted into an int...
+            if (!int.TryParse(reader.ReadLine(), out _gold))
+                return false;
+
+            //If the current line can't be converted into an int...
+            if (!int.TryParse(reader.ReadLine(), out _currentItemIndex))
+                //...return false
+                return false;
+
+            //Return whether or not the item was equipped successfully
+            return TryEquipItem(_currentItemIndex);
+
         }
     }
 }

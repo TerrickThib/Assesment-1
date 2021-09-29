@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Assesment_1
 {
@@ -64,9 +65,9 @@ namespace Assesment_1
             _knightItems = new Item[] { sword, shield };
 
             //Initialize Shop Items
-            Item healthPotion = new Item { Name = "Health Potion", StatBoost = 10, Type = ItemType.HEALTH, Cost = 20 };
-            Item attackPotion = new Item { Name = "Attack Potion", StatBoost = 10, Type = ItemType.ATTACK, Cost = 20 };
-            Item defensePotion = new Item { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
+            Item healthPotion = new Item { Name = "Health Potion", StatBoost = 20, Type = ItemType.HEALTH, Cost = 20 };
+            Item attackPotion = new Item { Name = "Attack Potion", StatBoost = 20, Type = ItemType.ATTACK, Cost = 20 };
+            Item defensePotion = new Item { Name = "Defense Potion", StatBoost = 20, Type = ItemType.DEFENSE, Cost = 20 };
             
             //Initalized the shops inventory into a array
             _shopInventory = new Item[] { healthPotion, attackPotion, defensePotion };
@@ -83,7 +84,7 @@ namespace Assesment_1
             //Enemie 3
             Entity rockMon = new Entity("Rocky THe Rock Dude", 25.0f, 20.0f, 20.0f);
             //Enemie 4
-            Entity thatGuy = new Entity("That One Guy", 1.0f, 1.0f, 1.0f);
+            Entity thatGuy = new Entity("That One Guy", 0.01f, 0.01f, 0.01f);
             //Enemie 5
             Entity unclePhil = new Entity("Uncle PHil", 50.0f, 30.0f, 25.0f);
 
@@ -122,7 +123,7 @@ namespace Assesment_1
         }
         public void End()
         {
-
+            Console.WriteLine("Thanks for Playing");
         }
         void DisplayCurrentScene()
         {
@@ -202,13 +203,73 @@ namespace Assesment_1
         //Will Save sertain aspects of the game to load later
         public void Save()
         {
+            //Create a new stream writer
+            StreamWriter writer = new StreamWriter("SaveData.txt");
 
+            //Saves current enemy index
+            writer.WriteLine(_currentEnemyIndex);
+
+            //Saves players stats and gold
+            _player.Save(writer);
+            //Shops gold
+            _shop.Save(writer);
+
+            //Closes write when done saving
+            writer.Close();
         }
 
         //Will try to Load game infomation from earlier save
         public bool Load()
         {
             bool loadSuccessful = true;
+
+            //If File Doesnt exist...
+            if (!File.Exists("SaveData.txt"))
+                //return false
+                loadSuccessful = false;
+
+            //Create a new reader to read from the text file
+            StreamReader reader = new StreamReader("SaveData.txt");
+
+            //If the first line can't be converted into an integer...
+            if (!int.TryParse(reader.ReadLine(), out _currentEnemyIndex))
+                //return false
+                loadSuccessful = false;
+
+            //Load player job
+            string job = reader.ReadLine();
+
+            //Assign player his job
+            if (job == "Wizard")
+                _player = new Player(_wizardItems);
+            else if (job == "Knight")
+                _player = new Player(_knightItems);
+            else
+                loadSuccessful = false;
+
+            _player.Job = job;
+
+            //Create a new instance and try to load the player
+            if (!_player.Load(reader))
+                loadSuccessful = false;
+
+            //Create a new instance and try to load the enemy
+            _currentEnemy = new Entity();
+            if (!_currentEnemy.Load(reader))
+                loadSuccessful = false;
+
+            //Update the array to match the current enemy stats
+            _enemies[_currentEnemyIndex] = _currentEnemy;
+
+            _currentScene = Scene.BATTLE;
+
+            //Create a new instance and try to load the shops gold
+            if (!_shop.Load(reader))
+                loadSuccessful = false;
+
+            //Close the reader once loading is finished
+            reader.Close();
+
             return loadSuccessful;
         }
           
@@ -400,8 +461,7 @@ namespace Assesment_1
             //Displays the item list for the shop
             int input = GetInput("Items To Buy.", _shop.GetItemNames());
             //_shop.Sell(_player, input);
-            _shop.Sell(_player, input);
-                        
+            _shop.Sell(_player, input);                        
         }
     }
 }

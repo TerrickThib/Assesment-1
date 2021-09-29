@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Assesment_1
 {
@@ -38,7 +39,7 @@ namespace Assesment_1
                 _gold += itemToBuy.Cost;
                 player.Buy(itemToBuy);
                 return true;
-            }            
+            }               
             return true;            
         }
         //Gets the items name in the shop to display
@@ -52,6 +53,19 @@ namespace Assesment_1
             }
 
             return itemNames;
+        }
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(_gold);
+        }
+        public bool Load(StreamReader reader)
+        {
+            
+            //If the current line can't be converted into an int...
+            if (!int.TryParse(reader.ReadLine(), out _gold))
+                return false;
+
+            return true;
         }
     }
 

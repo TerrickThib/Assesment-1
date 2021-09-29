@@ -10,6 +10,7 @@ namespace Assesment_1
         private Item _currentItem;
         private int _currentItemIndex;
         private string _job;
+        private int _gold;        
 
         public override float DefensePower
         {
@@ -33,6 +34,18 @@ namespace Assesment_1
                 return base.AttackPower;
             }
         }
+        public override float Health
+        {
+            get
+            {
+                //Will return health stat with item boost
+                if (_currentItem.Type == ItemType.HEALTH)
+                    return base.AttackPower + CurrentItem.StatBoost;
+
+                return base.Health;
+            }
+        }
+        
 
         //Sets these values to be used by other classes
         public Item CurrentItem
@@ -57,9 +70,11 @@ namespace Assesment_1
         //Sets base values for player
         public Player()
         {
+            _gold = 100;
             _items = new Item[0];
             _currentItem.Name = "Nothing";
             _currentItemIndex = -1;
+                        
         }
         public Player(Item[] items) : base()
         {
@@ -68,12 +83,13 @@ namespace Assesment_1
             _currentItemIndex = -1;
         }
         //Alows player to insert values
-        public Player(string name, float health, float attackPower, float defensePower, Item[] items, string job) : base(name, health, attackPower, defensePower)
+        public Player(string name, float health, float attackPower, float defensePower, Item[] items, string job, int gold) : base(name, health, attackPower, defensePower)
         {
             _items = items;
             _currentItem.Name = "Nothing";
             _job = job;
             _currentItemIndex = -1;
+            _gold = gold;
         }       
         /// <summary>
         /// Sets the item at the given index to be the current item.
@@ -129,6 +145,31 @@ namespace Assesment_1
                 itemNames[i] = _items[i].Name;
             }
             return itemNames;
+        }
+        //Allows you to use gold in other classes
+        public int Gold()
+        {
+            return _gold;
+        }
+        public void Buy(ShopItem item, int inventoryIndex)
+        {
+            //Check to see if the player can afford the item
+            if(_gold >= item.Cost)
+            {
+                //Pay for the item
+                _gold -= item.Cost;
+                //Use the Item just brought
+                
+            }
+            else if(_gold < item.Cost)
+            {
+                Console.WriteLine("You Broke Sonnnnn");
+                return;
+            }
+        }
+       public void UseShopItem()
+        {
+
         }
     }
 }

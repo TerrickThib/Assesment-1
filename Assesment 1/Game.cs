@@ -18,7 +18,15 @@ namespace Assesment_1
     {
         DEFENSE,
         ATTACK,
+        HEALTH,
         NONE
+    }
+    struct ShopItem
+    {
+        public string Name;
+        public float StatBoost;
+        public ItemType Type;
+        public int Cost;
     }
     public struct Item
     {
@@ -38,6 +46,11 @@ namespace Assesment_1
         private string _playerName;
         private Item[] _wizardItems;
         private Item[] _knightItems;
+        //Shop items
+        private Shop _shop;       
+        private ShopItem[] _shopInventory;
+
+
         /// <summary>
         /// Sets values for characters items so i can call on them later.
         /// </summary>
@@ -55,6 +68,14 @@ namespace Assesment_1
             _wizardItems = new Item[] { wizardWand, wizardBook };
             _knightItems = new Item[] { sword, shield };
 
+            //Initialize Shop Items
+            ShopItem healthPotion = new ShopItem { Name = "Health Potion", StatBoost = 10, Type = ItemType.HEALTH, Cost = 20 };
+            ShopItem defensePotion = new ShopItem { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
+            ShopItem attackPotion = new ShopItem { Name = "Attack Potion", StatBoost = 10, Type = ItemType.ATTACK, Cost = 20 };
+
+            //Initalized the shops inventory into a array
+            _shopInventory = new ShopItem[] { healthPotion, defensePotion, attackPotion };
+            _shop = new Shop(_shopInventory);
         }
         //Sets the enemies stats
         public void InitalizeEnemies()
@@ -98,6 +119,7 @@ namespace Assesment_1
             _currentScene = 0;
             InitalizeItems();
             InitalizeEnemies();
+            _player = new Player();
         }
         public void Update()
         {
@@ -122,6 +144,10 @@ namespace Assesment_1
                     break;
                 case Scene.BATTLE:
                     Battle();
+                    CheckBattleResults();
+                    break;
+                case Scene.RESTARTMENU:
+                    RestartMenu();
                     break;
             }
         }
@@ -241,12 +267,12 @@ namespace Assesment_1
             int Choice = GetInput("Pick a Character. ", "Wizard", "Knight");
             if (Choice == 0)
             {
-                _player = new Player(_playerName, 30, 20, 5, _wizardItems, "Wizard");
+                _player = new Player(_playerName, 30, 20, 5, _wizardItems, "Wizard", 100);
                 _currentScene = Scene.BATTLE;
             }
             else if (Choice == 1)
             {
-                _player = new Player(_playerName, 50, 15, 10, _knightItems, "Knight");
+                _player = new Player(_playerName, 50, 15, 10, _knightItems, "Knight", 100);
                 _currentScene = Scene.BATTLE;
             }
             Console.ReadKey();
@@ -328,6 +354,58 @@ namespace Assesment_1
 
             Console.ReadKey(true);
             Console.Clear();
+        }
+        void CheckBattleResults()
+        {
+            if(_player.Health <= 0)
+            {
+                Console.WriteLine("You done diddly Lost, Get out of hear");
+                Console.ReadKey(true);
+                Console.Clear();
+                _currentScene = Scene.RESTARTMENU;
+            }
+            else if (_currentEnemy.Health <= 0)
+            {
+                Console.WriteLine("You Beat " + _currentEnemy.Name);
+                Console.ReadKey();
+                Console.Clear();
+
+                ShopMenu();
+                // _currentEnemyIndex++;
+
+               if (_currentEnemyIndex >= _enemies.Length)
+                {
+                    _currentScene = Scene.RESTARTMENU;
+                    Console.WriteLine("You Killed everyone even BILL GOD WHY BILL HE WAS INCENT HE WAS GOOD. : (");
+                    return;
+                }
+                _currentEnemy = _enemies[_currentEnemyIndex];
+            }
+        }
+        //Ask the player if they want to restart Game or Quit
+        void RestartMenu()
+        {
+            int Input = GetInput("Play Again", "Yes", "No");
+
+            if (Input == 0)
+            {
+                _currentScene = Scene.STARTMENU;
+                InitalizeEnemies();
+            }
+            else if (Input == 1)
+            {
+                _gameOver = true;
+            }
+        }
+        private void ShopMenu()
+        {
+            //Displays players gold
+            Console.WriteLine("Player Gold: " + _player.Gold());
+
+            //Displays the item list for the shop
+            int input = GetInput("Items To Buy.", _shop.GetItemNames());
+            _shop.Sell(_player, input);
+            
         }
     }
 }

@@ -65,11 +65,11 @@ namespace Assesment_1
 
             //Initialize Shop Items
             Item healthPotion = new Item { Name = "Health Potion", StatBoost = 10, Type = ItemType.HEALTH, Cost = 20 };
-            Item defensePotion = new Item { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
             Item attackPotion = new Item { Name = "Attack Potion", StatBoost = 10, Type = ItemType.ATTACK, Cost = 20 };
-
+            Item defensePotion = new Item { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
+            
             //Initalized the shops inventory into a array
-            _shopInventory = new Item[] { healthPotion, defensePotion, attackPotion };
+            _shopInventory = new Item[] { healthPotion, attackPotion, defensePotion };
         }
         //Sets the enemies stats
         public void InitalizeEnemies()
@@ -366,7 +366,7 @@ namespace Assesment_1
                 Console.Clear();
 
                 ShopMenu();
-                // _currentEnemyIndex++;
+                _currentEnemyIndex++;
 
                if (_currentEnemyIndex >= _enemies.Length)
                 {
@@ -399,10 +399,9 @@ namespace Assesment_1
 
             //Displays the item list for the shop
             int input = GetInput("Items To Buy.", _shop.GetItemNames());
+            //_shop.Sell(_player, input);
             _shop.Sell(_player, input);
-            _player.Buy();
-            
-            
+                        
         }
     }
 }

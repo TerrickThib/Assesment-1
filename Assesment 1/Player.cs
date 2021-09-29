@@ -40,7 +40,7 @@ namespace Assesment_1
             {
                 //Will return health stat with item boost
                 if (_currentItem.Type == ItemType.HEALTH)
-                    return base.AttackPower + CurrentItem.StatBoost;
+                    return base.Health + CurrentItem.StatBoost;
 
                 return base.Health;
             }
@@ -151,7 +151,7 @@ namespace Assesment_1
         {
             return _gold;
         }
-        public void Buy(Item item, int currentItemIndex)
+        public void Buy(Item item)
         {
             //Check to see if the player can afford the item
             if (_gold >= item.Cost)
@@ -160,9 +160,7 @@ namespace Assesment_1
                 _gold -= item.Cost;
                 //Set the item you just brought to be current item
                 _currentItem = item;
-                Console.WriteLine("You Purchased Item");
-                
-                                
+                Console.WriteLine("You Purchased Item");                                                
             }
             else if(_gold < item.Cost)
             {

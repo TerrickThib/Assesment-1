@@ -151,15 +151,18 @@ namespace Assesment_1
         {
             return _gold;
         }
-        public void Buy(ShopItem item, int inventoryIndex)
+        public void Buy(Item item, int currentItemIndex)
         {
             //Check to see if the player can afford the item
-            if(_gold >= item.Cost)
+            if (_gold >= item.Cost)
             {
                 //Pay for the item
                 _gold -= item.Cost;
-                //Use the Item just brought
+                //Set the item you just brought to be current item
+                _currentItem = item;
+                Console.WriteLine("You Purchased Item");
                 
+                                
             }
             else if(_gold < item.Cost)
             {
@@ -169,7 +172,7 @@ namespace Assesment_1
         }
        public void UseShopItem()
         {
-
+            
         }
     }
 }

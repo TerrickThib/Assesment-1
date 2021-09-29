@@ -21,18 +21,13 @@ namespace Assesment_1
         HEALTH,
         NONE
     }
-    struct ShopItem
-    {
-        public string Name;
-        public float StatBoost;
-        public ItemType Type;
-        public int Cost;
-    }
+    
     public struct Item
     {
         public string Name;
         public float StatBoost;
         public ItemType Type;
+        public int Cost;
     }
     class Game
     {
@@ -48,7 +43,7 @@ namespace Assesment_1
         private Item[] _knightItems;
         //Shop items
         private Shop _shop;       
-        private ShopItem[] _shopInventory;
+        private Item[] _shopInventory;
 
 
         /// <summary>
@@ -69,13 +64,12 @@ namespace Assesment_1
             _knightItems = new Item[] { sword, shield };
 
             //Initialize Shop Items
-            ShopItem healthPotion = new ShopItem { Name = "Health Potion", StatBoost = 10, Type = ItemType.HEALTH, Cost = 20 };
-            ShopItem defensePotion = new ShopItem { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
-            ShopItem attackPotion = new ShopItem { Name = "Attack Potion", StatBoost = 10, Type = ItemType.ATTACK, Cost = 20 };
+            Item healthPotion = new Item { Name = "Health Potion", StatBoost = 10, Type = ItemType.HEALTH, Cost = 20 };
+            Item defensePotion = new Item { Name = "Defense Potion", StatBoost = 10, Type = ItemType.DEFENSE, Cost = 20 };
+            Item attackPotion = new Item { Name = "Attack Potion", StatBoost = 10, Type = ItemType.ATTACK, Cost = 20 };
 
             //Initalized the shops inventory into a array
-            _shopInventory = new ShopItem[] { healthPotion, defensePotion, attackPotion };
-            _shop = new Shop(_shopInventory);
+            _shopInventory = new Item[] { healthPotion, defensePotion, attackPotion };
         }
         //Sets the enemies stats
         public void InitalizeEnemies()
@@ -120,6 +114,7 @@ namespace Assesment_1
             InitalizeItems();
             InitalizeEnemies();
             _player = new Player();
+            _shop = new Shop(_shopInventory);
         }
         public void Update()
         {
@@ -405,6 +400,8 @@ namespace Assesment_1
             //Displays the item list for the shop
             int input = GetInput("Items To Buy.", _shop.GetItemNames());
             _shop.Sell(_player, input);
+            _player.Buy();
+            
             
         }
     }

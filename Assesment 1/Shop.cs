@@ -8,17 +8,18 @@ namespace Assesment_1
     {
         //Varibles for shop
         private int _gold;
-        private ShopItem[] _inventory;
+        private Item[] _inventory;
         public string name;
         public int cost;
+        
 
         public Shop()
         {
             _gold = 100;
-            _inventory = new ShopItem[3];
+            _inventory = new Item[3];
         }
 
-        public Shop(ShopItem[] items)
+        public Shop(Item[] items)
         {
             _gold = 100;
             //Set our inventory array to be the array of items that was passed in.
@@ -28,7 +29,7 @@ namespace Assesment_1
         public bool Sell(Player player, int itemIndex)
         {
             //Find the item to buy in the inventory array
-            ShopItem itemToBuy = _inventory[itemIndex];
+            Item itemToBuy = _inventory[itemIndex];
 
             //Check to see if the player has anofe gold
             if (player.Gold() >= itemToBuy.Cost)

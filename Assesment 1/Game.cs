@@ -125,7 +125,7 @@ namespace Assesment_1
         {
             Console.WriteLine("Thanks for Playing");
         }
-        void DisplayCurrentScene()
+        public void DisplayCurrentScene()
         {
             switch(_currentScene)
             {
@@ -153,7 +153,7 @@ namespace Assesment_1
         /// <param name="description">The question or thing being descriped</param>
         /// <param name="options">Options the player has and can pick</param>
         /// <returns></returns>
-        int GetInput(string description, params string[] options)
+        public int GetInput(string description, params string[] options)
         {
             string input = "";
             int inputReceived = -1;

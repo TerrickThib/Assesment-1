@@ -172,21 +172,37 @@ namespace Assesment_1
        public override void Save(StreamWriter writer)
         {                      
             writer.WriteLine(_job);
+            //Saves what Entity is
             base.Save(writer);
-            writer.WriteLine(_currentItemIndex);
-            _gold = Gold();
+           
+            //Saves Gold
             writer.WriteLine(_gold);
+
+            //Save current item            
+            writer.WriteLine(_currentItem.Name);
+            writer.WriteLine(_currentItem.StatBoost);
+            writer.WriteLine(_currentItem.Cost);
+
+            //Saves Players current Item Index
+            writer.WriteLine(_currentItemIndex);                        
         }
         public override bool Load(StreamReader reader)
         {
-            _gold = Gold();
+            
             //If the Base loading function fails...
             if (!base.Load(reader))
                 //return false
-                return false;
-
+                return false;                       
             //If the current line can't be converted into an int...
             if (!int.TryParse(reader.ReadLine(), out _gold))
+                return false;
+
+            //Loads current Item equiped  Name and StatBoost
+            _currentItem.Name = reader.ReadLine();
+            if (!float.TryParse(reader.ReadLine(), out _currentItem.StatBoost))
+                return false;
+            //Saves Current item Cost
+            if (!int.TryParse(reader.ReadLine(), out _currentItem.Cost))
                 return false;
 
             //If the current line can't be converted into an int...
@@ -194,6 +210,7 @@ namespace Assesment_1
                 //...return false
                 return false;
 
+            
             //Return whether or not the item was equipped successfully
             return TryEquipItem(_currentItemIndex);
 

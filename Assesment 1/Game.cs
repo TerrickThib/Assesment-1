@@ -211,9 +211,7 @@ namespace Assesment_1
 
             //Saves players stats and gold
             _player.Save(writer);
-            //Shops gold
-            _shop.Save(writer);
-
+            _currentEnemy.Save(writer);
             //Closes write when done saving
             writer.Close();
         }
@@ -262,11 +260,7 @@ namespace Assesment_1
             _enemies[_currentEnemyIndex] = _currentEnemy;
 
             _currentScene = Scene.BATTLE;
-
-            //Create a new instance and try to load the shops gold
-            if (!_shop.Load(reader))
-                loadSuccessful = false;
-
+            
             //Close the reader once loading is finished
             reader.Close();
 

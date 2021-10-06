@@ -358,7 +358,7 @@ namespace Assesment_1
             DisplayStats(_player);
             DisplayStats(_currentEnemy);
 
-            int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?", "Attack", "Equip Item", "Remove current item", "Save Game");
+            int input = GetInput("A " + _currentEnemy.Name + " stands in front of you! What will you do?", "Attack", "Equip Item", "Remove current item", "Save Game", "Exit Game");
 
             //If player decides to Attack
             if (input == 0)
@@ -398,6 +398,14 @@ namespace Assesment_1
                 Console.Clear();
                 return;
             }
+            //Gives player option to Exit game
+            else if (input == 4)
+            {
+                Console.ReadKey(true);
+                Console.Clear();
+                _gameOver = true;
+            }
+
             //Displays how much dammagie you did and how much the enemie does
             damageDealt = _currentEnemy.Attack(_player);
             Console.WriteLine("The " + _currentEnemy.Name + " dealt" + damageDealt, " damage!");
@@ -405,6 +413,9 @@ namespace Assesment_1
             Console.ReadKey(true);
             Console.Clear();
         }
+        /// <summary>
+        /// Checks to see who won if you lose displays messge and restart menu
+        /// </summary>
         void CheckBattleResults()
         {
             if(_player.Health <= 0)

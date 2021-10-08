@@ -416,7 +416,7 @@ namespace Assesment_1
         /// <summary>
         /// Checks to see who won if you lose displays messge and restart menu
         /// </summary>
-        void CheckBattleResults()
+        public void CheckBattleResults()
         {
             if(_player.Health <= 0)
             {

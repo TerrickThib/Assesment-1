@@ -2,7 +2,7 @@ Assesment 1
 # Fantasy Fighters  
 
 ## How To Open Game  
-- Open File downloaded and locate the File Called Assment 1 that is a Application Type and open it.  
+- Open File downloaded and locate the File called Fantasy Fighters Assment and open then Located the file Called Assment 1 that is a application type and Open it and Enjoy Game.
 
 ## How To Play Game  
 - In the game you will go though multiple Fights and choices you will have the ablity to Attack, Equiped a item, Save the game and exit while in a fight.   

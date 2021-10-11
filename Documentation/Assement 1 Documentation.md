@@ -37,7 +37,7 @@ Creation of a application that demnstrates use of C#
 - Displays players options to either Attack, Equiped Item, Unequiped Item, or Save.  
 
 # A:Demo  
-  DeBug Dungeon 
+  ![Fighter UI](png)
   
   
 # II.Design  

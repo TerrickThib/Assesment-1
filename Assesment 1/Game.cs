@@ -224,7 +224,8 @@ namespace Assesment_1
             //If File Doesnt exist...
             if (!File.Exists("SaveData.txt"))
                 //return false
-                loadSuccessful = false;
+                return false;
+            
 
             //Create a new reader to read from the text file
             StreamReader reader = new StreamReader("SaveData.txt");
@@ -279,7 +280,7 @@ namespace Assesment_1
             {
                 //Will try to load up a previous save.
                 if (Load())
-                {
+                {                    
                     Console.WriteLine("Load Successful!");
                     Console.ReadKey(true);
                     Console.Clear();
